@@ -40,7 +40,7 @@ function AdminPage() {
   const { data: txs = [] } = useQuery({
     queryKey: ["admin-tx"],
     enabled: role === "admin",
-    queryFn: async () => (await supabase.from("transactions").select("*, books(title), profiles:user_id(name, email)").order("borrow_date", { ascending: false })).data ?? [],
+    queryFn: async () => (await supabase.from("transactions").select("*, books(title)").order("borrow_date", { ascending: false })).data ?? [],
   });
 
   const { data: users = [] } = useQuery({
@@ -156,7 +156,7 @@ function AdminPage() {
                     const overdue = !t.return_date && new Date(t.due_date) < new Date();
                     return (
                       <tr key={t.id} className="border-t border-border/40">
-                        <td className="p-3">{t.profiles?.name ?? "—"}</td>
+                        <td className="p-3">{users.find((u) => u.id === t.user_id)?.name ?? "—"}</td>
                         <td className="p-3 font-medium">{t.books?.title}</td>
                         <td className="p-3">{new Date(t.borrow_date).toLocaleDateString()}</td>
                         <td className="p-3">{new Date(t.due_date).toLocaleDateString()}</td>
