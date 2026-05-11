@@ -26,8 +26,8 @@ function AdminPage() {
 
   useEffect(() => {
     if (!loading) {
-      if (!user) navigate({ to: "/auth" });
-      else if (role && role !== "admin") navigate({ to: "/books" });
+      if (!user) navigate({ to: "/admin-login" });
+      else if (role && role !== "admin") navigate({ to: "/admin-login" });
     }
   }, [user, role, loading, navigate]);
 

@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/auth")({
@@ -28,9 +29,22 @@ function AuthPage() {
     e.preventDefault();
     setLoading(true);
     const { error } = await signIn(signInData.email, signInData.password);
+    if (error) { setLoading(false); toast.error(error); return; }
+    // Block admin accounts from the member login route
+    const { data: { user: u } } = await supabase.auth.getUser();
+    if (u) {
+      const { data: roles } = await supabase.from("user_roles").select("role").eq("user_id", u.id);
+      if (roles?.some((r: { role: string }) => r.role === "admin")) {
+        await supabase.auth.signOut();
+        setLoading(false);
+        toast.error("Administrators must sign in via the admin portal.");
+        navigate({ to: "/admin-login" });
+        return;
+      }
+    }
     setLoading(false);
-    if (error) toast.error(error);
-    else { toast.success("Welcome back!"); navigate({ to: "/books" }); }
+    toast.success("Welcome back!");
+    navigate({ to: "/books" });
   };
 
   const handleSignUp = async (e: React.FormEvent) => {
