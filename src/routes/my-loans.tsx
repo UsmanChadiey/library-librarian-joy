@@ -20,11 +20,14 @@ type Tx = {
 };
 
 function MyLoans() {
-  const { user, loading } = useAuth();
+  const { user, role, loading } = useAuth();
   const navigate = useNavigate();
   const qc = useQueryClient();
 
-  useEffect(() => { if (!loading && !user) navigate({ to: "/auth" }); }, [user, loading, navigate]);
+  useEffect(() => {
+    if (!loading && !user) navigate({ to: "/auth" });
+    else if (!loading && role === "admin") navigate({ to: "/admin" });
+  }, [user, role, loading, navigate]);
 
   const { data: txs = [] } = useQuery({
     queryKey: ["my-loans", user?.id],
