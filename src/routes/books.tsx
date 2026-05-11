@@ -16,7 +16,7 @@ export const Route = createFileRoute("/books")({
 });
 
 function BooksPage() {
-  const { user } = useAuth();
+  const { user, role } = useAuth();
   const qc = useQueryClient();
   const [q, setQ] = useState("");
   const [genre, setGenre] = useState<string>("All");
@@ -92,7 +92,7 @@ function BooksPage() {
                   </Badge>
                 </div>
                 <div className="mt-auto pt-4">
-                  {user ? (
+                  {role === "admin" ? null : user ? (
                     <Button className="w-full" disabled={b.available_copies < 1} onClick={() => borrow(b.id, b.available_copies)}>
                       Borrow
                     </Button>

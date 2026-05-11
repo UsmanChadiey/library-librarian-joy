@@ -19,7 +19,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             <Link to="/books">
               <Button variant="ghost" size="sm"><BookOpen className="w-4 h-4 mr-1" />Catalog</Button>
             </Link>
-            {user && (
+            {user && role !== "admin" && (
               <Link to="/my-loans">
                 <Button variant="ghost" size="sm"><UserIcon className="w-4 h-4 mr-1" />My Loans</Button>
               </Link>
