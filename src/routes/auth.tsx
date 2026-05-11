@@ -84,7 +84,7 @@ function AuthPage() {
                 <div><Label>Course</Label><Input required value={signUpData.course} onChange={(e) => setSignUpData({ ...signUpData, course: e.target.value })} /></div>
                 <div><Label>Level</Label><Input required placeholder="e.g. 200" value={signUpData.level} onChange={(e) => setSignUpData({ ...signUpData, level: e.target.value })} /></div>
                 <div><Label>UG No.</Label><Input required value={signUpData.ug_no} onChange={(e) => setSignUpData({ ...signUpData, ug_no: e.target.value })} /></div>
-                <div><Label>Password</Label><Input type="password" required minLength={6} value={signUpData.password} onChange={(e) => setSignUpData({ ...signUpData, password: e.target.value })} /></div>
+                <div><Label>Password</Label><PasswordInput required minLength={6} value={signUpData.password} onChange={(e) => setSignUpData({ ...signUpData, password: e.target.value })} /></div>
                 <Button type="submit" className="w-full" disabled={loading}>{loading ? "Creating..." : "Create account"}</Button>
               </form>
             </TabsContent>
