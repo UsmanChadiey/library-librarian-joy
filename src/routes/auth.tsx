@@ -34,7 +34,7 @@ function AuthPage() {
     const { data: { user: u } } = await supabase.auth.getUser();
     if (u) {
       const { data: roles } = await supabase.from("user_roles").select("role").eq("user_id", u.id);
-      if (roles?.some((r) => r.role === "admin")) {
+      if (roles?.some((r: { role: string }) => r.role === "admin")) {
         await supabase.auth.signOut();
         setLoading(false);
         toast.error("Administrators must sign in via the admin portal.");
