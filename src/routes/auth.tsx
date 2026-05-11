@@ -19,7 +19,7 @@ function AuthPage() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [signInData, setSignInData] = useState({ email: "", password: "" });
-  const [signUpData, setSignUpData] = useState({ name: "", email: "", password: "" });
+  const [signUpData, setSignUpData] = useState({ name: "", email: "", password: "", course: "", level: "", ug_no: "" });
 
   useEffect(() => {
     if (user) navigate({ to: "/books" });
@@ -51,7 +51,7 @@ function AuthPage() {
     e.preventDefault();
     if (signUpData.password.length < 6) { toast.error("Password must be at least 6 characters"); return; }
     setLoading(true);
-    const { error } = await signUp(signUpData.email, signUpData.password, signUpData.name);
+    const { error } = await signUp(signUpData.email, signUpData.password, signUpData.name, { course: signUpData.course, level: signUpData.level, ug_no: signUpData.ug_no });
     setLoading(false);
     if (error) toast.error(error);
     else { toast.success("Account created!"); navigate({ to: "/books" }); }
@@ -79,6 +79,9 @@ function AuthPage() {
               <form onSubmit={handleSignUp} className="space-y-4 mt-4">
                 <div><Label>Full name</Label><Input required value={signUpData.name} onChange={(e) => setSignUpData({ ...signUpData, name: e.target.value })} /></div>
                 <div><Label>Email</Label><Input type="email" required value={signUpData.email} onChange={(e) => setSignUpData({ ...signUpData, email: e.target.value })} /></div>
+                <div><Label>Course</Label><Input required value={signUpData.course} onChange={(e) => setSignUpData({ ...signUpData, course: e.target.value })} /></div>
+                <div><Label>Level</Label><Input required placeholder="e.g. 200" value={signUpData.level} onChange={(e) => setSignUpData({ ...signUpData, level: e.target.value })} /></div>
+                <div><Label>UG No.</Label><Input required value={signUpData.ug_no} onChange={(e) => setSignUpData({ ...signUpData, ug_no: e.target.value })} /></div>
                 <div><Label>Password</Label><Input type="password" required minLength={6} value={signUpData.password} onChange={(e) => setSignUpData({ ...signUpData, password: e.target.value })} /></div>
                 <Button type="submit" className="w-full" disabled={loading}>{loading ? "Creating..." : "Create account"}</Button>
               </form>
