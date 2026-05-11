@@ -72,7 +72,8 @@ function AuthPage() {
             <TabsContent value="signin">
               <form onSubmit={handleSignIn} className="space-y-4 mt-4">
                 <div><Label>Email</Label><Input type="email" required value={signInData.email} onChange={(e) => setSignInData({ ...signInData, email: e.target.value })} /></div>
-                <div><Label>Password</Label><Input type="password" required value={signInData.password} onChange={(e) => setSignInData({ ...signInData, password: e.target.value })} /></div>
+                <div><Label>Password</Label><PasswordInput required value={signInData.password} onChange={(e) => setSignInData({ ...signInData, password: e.target.value })} /></div>
+                <div className="text-right text-sm"><Link to="/forgot-password" className="text-primary hover:underline">Forgot password?</Link></div>
                 <Button type="submit" className="w-full" disabled={loading}>{loading ? "Signing in..." : "Sign in"}</Button>
               </form>
             </TabsContent>
