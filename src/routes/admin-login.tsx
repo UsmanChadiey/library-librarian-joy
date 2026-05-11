@@ -73,7 +73,7 @@ function AdminLoginPage() {
             </div>
             <div>
               <Label>Password</Label>
-              <Input type="password" required value={data.password} onChange={(e) => setData({ ...data, password: e.target.value })} />
+              <PasswordInput required value={data.password} onChange={(e) => setData({ ...data, password: e.target.value })} />
             </div>
             <Button type="submit" className="w-full" disabled={loading}>
               {loading ? "Verifying..." : "Sign in as admin"}
