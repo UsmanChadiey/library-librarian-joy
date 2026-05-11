@@ -5,6 +5,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/PasswordInput";
 import { Label } from "@/components/ui/label";
 import { Shield } from "lucide-react";
 import { toast } from "sonner";
@@ -72,7 +73,7 @@ function AdminLoginPage() {
             </div>
             <div>
               <Label>Password</Label>
-              <Input type="password" required value={data.password} onChange={(e) => setData({ ...data, password: e.target.value })} />
+              <PasswordInput required value={data.password} onChange={(e) => setData({ ...data, password: e.target.value })} />
             </div>
             <Button type="submit" className="w-full" disabled={loading}>
               {loading ? "Verifying..." : "Sign in as admin"}

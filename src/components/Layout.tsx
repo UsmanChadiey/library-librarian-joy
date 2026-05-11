@@ -30,9 +30,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
               </Link>
             )}
             {user ? (
-              <Button variant="outline" size="sm" onClick={async () => { await signOut(); navigate({ to: "/" }); }}>
-                <LogOut className="w-4 h-4 mr-1" />Sign out
-              </Button>
+              <>
+                <Link to="/account">
+                  <Button variant="ghost" size="sm">Account</Button>
+                </Link>
+                <Button variant="outline" size="sm" onClick={async () => { await signOut(); navigate({ to: "/" }); }}>
+                  <LogOut className="w-4 h-4 mr-1" />Sign out
+                </Button>
+              </>
             ) : (
               <Link to="/auth">
                 <Button size="sm">Sign in</Button>

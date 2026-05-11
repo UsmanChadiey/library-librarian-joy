@@ -1,10 +1,11 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Layout } from "@/components/Layout";
 import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { PasswordInput } from "@/components/PasswordInput";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -71,7 +72,8 @@ function AuthPage() {
             <TabsContent value="signin">
               <form onSubmit={handleSignIn} className="space-y-4 mt-4">
                 <div><Label>Email</Label><Input type="email" required value={signInData.email} onChange={(e) => setSignInData({ ...signInData, email: e.target.value })} /></div>
-                <div><Label>Password</Label><Input type="password" required value={signInData.password} onChange={(e) => setSignInData({ ...signInData, password: e.target.value })} /></div>
+                <div><Label>Password</Label><PasswordInput required value={signInData.password} onChange={(e) => setSignInData({ ...signInData, password: e.target.value })} /></div>
+                <div className="text-right text-sm"><Link to="/forgot-password" className="text-primary hover:underline">Forgot password?</Link></div>
                 <Button type="submit" className="w-full" disabled={loading}>{loading ? "Signing in..." : "Sign in"}</Button>
               </form>
             </TabsContent>
@@ -82,7 +84,7 @@ function AuthPage() {
                 <div><Label>Course</Label><Input required value={signUpData.course} onChange={(e) => setSignUpData({ ...signUpData, course: e.target.value })} /></div>
                 <div><Label>Level</Label><Input required placeholder="e.g. 200" value={signUpData.level} onChange={(e) => setSignUpData({ ...signUpData, level: e.target.value })} /></div>
                 <div><Label>UG No.</Label><Input required value={signUpData.ug_no} onChange={(e) => setSignUpData({ ...signUpData, ug_no: e.target.value })} /></div>
-                <div><Label>Password</Label><Input type="password" required minLength={6} value={signUpData.password} onChange={(e) => setSignUpData({ ...signUpData, password: e.target.value })} /></div>
+                <div><Label>Password</Label><PasswordInput required minLength={6} value={signUpData.password} onChange={(e) => setSignUpData({ ...signUpData, password: e.target.value })} /></div>
                 <Button type="submit" className="w-full" disabled={loading}>{loading ? "Creating..." : "Create account"}</Button>
               </form>
             </TabsContent>
