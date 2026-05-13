@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Layout } from "@/components/Layout";
@@ -91,6 +91,9 @@ function MyLoans() {
                   </div>
                 </div>
                 <div className="flex gap-2">
+                  <Link to="/read/$bookId" params={{ bookId: t.book_id }}>
+                    <Button variant="secondary" disabled={overdue}>Read PDF</Button>
+                  </Link>
                   <Button variant="outline" onClick={() => renew(t)} disabled={t.renewed_count >= 2}>Renew</Button>
                   <Button onClick={() => returnBook(t)}>Return</Button>
                 </div>
