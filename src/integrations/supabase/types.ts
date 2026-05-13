@@ -24,6 +24,7 @@ export type Database = {
           genre: string | null
           id: string
           isbn: string | null
+          pdf_path: string | null
           title: string
           total_copies: number
         }
@@ -36,6 +37,7 @@ export type Database = {
           genre?: string | null
           id?: string
           isbn?: string | null
+          pdf_path?: string | null
           title: string
           total_copies?: number
         }
@@ -48,6 +50,7 @@ export type Database = {
           genre?: string | null
           id?: string
           isbn?: string | null
+          pdf_path?: string | null
           title?: string
           total_copies?: number
         }
