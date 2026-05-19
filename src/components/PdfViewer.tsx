@@ -4,8 +4,7 @@ import pdfWorkerUrl from "react-pdf/node_modules/pdfjs-dist/build/pdf.worker.min
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { ChevronLeft, ChevronRight, ZoomIn, ZoomOut, Loader2 } from "lucide-react";
+import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
 pdfjs.GlobalWorkerOptions.workerSrc = pdfWorkerUrl;
@@ -13,7 +12,6 @@ pdfjs.GlobalWorkerOptions.workerSrc = pdfWorkerUrl;
 export default function PdfViewer({ data }: { data: Uint8Array }) {
   const [numPages, setNumPages] = useState(0);
   const [pageNumber, setPageNumber] = useState(1);
-  const [scale, setScale] = useState(1.1);
   const [pageWidth, setPageWidth] = useState(800);
   const [renderError, setRenderError] = useState<string | null>(null);
   const pdfFile = useMemo(() => ({ data }), [data]);
@@ -37,59 +35,21 @@ export default function PdfViewer({ data }: { data: Uint8Array }) {
   }, [numPages]);
 
   useEffect(() => {
-    const update = () => setPageWidth(Math.min(window.innerWidth - 48, 900));
+    const update = () => setPageWidth(Math.min(window.innerWidth - 32, 900));
     update();
     window.addEventListener("resize", update);
     return () => window.removeEventListener("resize", update);
   }, []);
 
   if (renderError) {
-    return <Card className="p-6 text-center text-destructive">{renderError}</Card>;
+    return <div className="p-6 text-center text-destructive">{renderError}</div>;
   }
 
-  return (
-    <>
-      <Card className="p-3 mb-4 flex items-center justify-between gap-2 flex-wrap sticky top-2 z-10 backdrop-blur bg-card/90">
-        <div className="flex items-center gap-1">
-          <Button
-            variant="outline" size="icon"
-            onClick={() => setPageNumber((p) => Math.max(1, p - 1))}
-            disabled={pageNumber <= 1} aria-label="Previous page"
-          >
-            <ChevronLeft />
-          </Button>
-          <span className="text-sm tabular-nums px-2 min-w-[80px] text-center">
-            {pageNumber} / {numPages || "…"}
-          </span>
-          <Button
-            variant="outline" size="icon"
-            onClick={() => setPageNumber((p) => Math.min(numPages, p + 1))}
-            disabled={pageNumber >= numPages} aria-label="Next page"
-          >
-            <ChevronRight />
-          </Button>
-        </div>
-        <div className="flex items-center gap-1">
-          <Button
-            variant="outline" size="icon"
-            onClick={() => setScale((s) => Math.max(0.5, +(s - 0.1).toFixed(2)))}
-            aria-label="Zoom out"
-          >
-            <ZoomOut />
-          </Button>
-          <span className="text-sm tabular-nums px-2 min-w-[56px] text-center">
-            {Math.round(scale * 100)}%
-          </span>
-          <Button
-            variant="outline" size="icon"
-            onClick={() => setScale((s) => Math.min(2.5, +(s + 0.1).toFixed(2)))}
-            aria-label="Zoom in"
-          >
-            <ZoomIn />
-          </Button>
-        </div>
-      </Card>
+  const canPrev = pageNumber > 1;
+  const canNext = pageNumber < numPages;
 
+  return (
+    <div className="relative pb-24">
       <div
         className="flex justify-center select-none"
         onContextMenu={(e) => e.preventDefault()}
@@ -104,23 +64,51 @@ export default function PdfViewer({ data }: { data: Uint8Array }) {
           }}
           loading={
             <div className="p-12 flex items-center gap-2 text-muted-foreground">
-              <Loader2 className="animate-spin h-4 w-4" /> Rendering…
+              <Loader2 className="animate-spin h-4 w-4" /> Loading book…
             </div>
           }
         >
           <Page
             pageNumber={pageNumber}
-            width={pageWidth * scale}
+            width={pageWidth}
             renderAnnotationLayer={false}
             renderTextLayer={false}
             onRenderError={(error) => {
               console.error(error);
               setRenderError("Failed to render this page");
             }}
-            className="shadow-[var(--shadow-book)] rounded-md overflow-hidden bg-white"
+            className="shadow-lg rounded-md overflow-hidden bg-white"
           />
         </Document>
       </div>
-    </>
+
+      {numPages > 0 && (
+        <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2 rounded-full border bg-card/95 backdrop-blur px-2 py-1.5 shadow-lg">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="rounded-full h-9 w-9"
+            onClick={() => setPageNumber((p) => Math.max(1, p - 1))}
+            disabled={!canPrev}
+            aria-label="Previous page"
+          >
+            <ChevronLeft className="h-5 w-5" />
+          </Button>
+          <span className="text-sm tabular-nums px-2 min-w-[70px] text-center font-medium">
+            {pageNumber} / {numPages}
+          </span>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="rounded-full h-9 w-9"
+            onClick={() => setPageNumber((p) => Math.min(numPages, p + 1))}
+            disabled={!canNext}
+            aria-label="Next page"
+          >
+            <ChevronRight className="h-5 w-5" />
+          </Button>
+        </div>
+      )}
+    </div>
   );
 }
